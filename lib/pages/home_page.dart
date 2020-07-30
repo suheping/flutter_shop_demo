@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../service/service_methods.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
+// import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -25,7 +27,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getHotGoods();
+    // _getHotGoods();
   }
 
   // 获取火爆专区商品数据
@@ -33,11 +35,13 @@ class _HomePageState extends State<HomePage>
     customRequest('homePageBelowConten', formData: {'page': pageNo})
         .then((value) {
       var data = json.decode(value.toString());
-      List<Map> newList = (data['data'] as List).cast();
-      setState(() {
-        hotGoodsList.addAll(newList);
-        pageNo++;
-      });
+      if (data['data'] != null) {
+        List<Map> newList = (data['data'] as List).cast();
+        setState(() {
+          hotGoodsList.addAll(newList);
+          pageNo++;
+        });
+      }
     });
   }
 
@@ -70,42 +74,56 @@ class _HomePageState extends State<HomePage>
             String floor3Pic = data['data']['floor3Pic']['PICTURE_ADDRESS'];
             List<Map> floor3Info = (data['data']['floor3'] as List).cast();
 
-            return SingleChildScrollView(
-                child: Column(
-              children: <Widget>[
-                SwiperDiy(
-                  swiperDataList: swiperDataList,
+            return EasyRefresh(
+                onLoad: () async {
+                  // 上拉时执行的东西
+                  print('开始加载更多火爆专区商品');
+                  _getHotGoods();
+                },
+                footer: ClassicalFooter(
+                  bgColor: Colors.white,
+                  textColor: Colors.pink,
+                  noMoreText: '', //目前没有判断是否还有更多，先设置为空
+                  showInfo: false,
+                  loadReadyText: '上拉加载',
+                  loadedText: '加载完成',
+                  enableInfiniteLoad: false, //上拉一下才会加载，不会自动加载，默认为true
                 ),
-                TopNavigator(
-                  navigatorDataList: navigatorDataList,
-                ),
-                AdBanner(
-                  adPictureUrl: adPictureUrl,
-                ),
-                ShopInfo(
-                  leaderImage: leaderImage,
-                  leaderPhone: leaderPhone,
-                ),
-                Recommend(
-                  recommendList: recommendList,
-                ),
-                Floor(
-                  floorPic: floor1Pic,
-                  floorInfo: floor1Info,
-                ),
-                Floor(
-                  floorPic: floor2Pic,
-                  floorInfo: floor2Info,
-                ),
-                Floor(
-                  floorPic: floor3Pic,
-                  floorInfo: floor3Info,
-                ),
-                HotGoods(
-                  hotGoodsList: this.hotGoodsList,
-                )
-              ],
-            ));
+                child: ListView(
+                  children: <Widget>[
+                    SwiperDiy(
+                      swiperDataList: swiperDataList,
+                    ),
+                    TopNavigator(
+                      navigatorDataList: navigatorDataList,
+                    ),
+                    AdBanner(
+                      adPictureUrl: adPictureUrl,
+                    ),
+                    ShopInfo(
+                      leaderImage: leaderImage,
+                      leaderPhone: leaderPhone,
+                    ),
+                    Recommend(
+                      recommendList: recommendList,
+                    ),
+                    Floor(
+                      floorPic: floor1Pic,
+                      floorInfo: floor1Info,
+                    ),
+                    Floor(
+                      floorPic: floor2Pic,
+                      floorInfo: floor2Info,
+                    ),
+                    Floor(
+                      floorPic: floor3Pic,
+                      floorInfo: floor3Info,
+                    ),
+                    HotGoods(
+                      hotGoodsList: this.hotGoodsList,
+                    )
+                  ],
+                ));
           } else {
             return Center(
               child: Text('加载中。。。。'),
@@ -381,6 +399,7 @@ class _HotGoodsState extends State<HotGoods> {
     List<Widget> hotGoodsWidgetList;
     if (hotGoodsList != null) {
       hotGoodsWidgetList = this.hotGoodsList.map((item) {
+        // 返回每个商品widget
         return InkWell(
           onTap: () {},
           child: Container(
@@ -391,13 +410,26 @@ class _HotGoodsState extends State<HotGoods> {
                   child: Image.network(item['image']),
                 ),
                 Container(
-                  child: Text(item['name']),
+                  child: Text(
+                    item['name'],
+                    style: TextStyle(color: Colors.pink, fontSize: 18),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Text('￥${item['mallPrice']}'),
-                    Text('￥${item['price']}')
+                    Text(
+                      '￥${item['mallPrice']}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      '￥${item['price']}',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough),
+                    )
                   ],
                 )
               ],
@@ -417,9 +449,32 @@ class _HotGoodsState extends State<HotGoods> {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Text('火爆专区'),
-          ),
+              margin: EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 20,
+                    height: 20,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '火',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.pink,
+                      borderRadius: BorderRadius.circular(10),
+                      // border: Border.all(color: Colors.grey, width: 1)
+                    ),
+                  ),
+                  SizedBox(
+                    width: 1,
+                  ),
+                  Text(
+                    '火爆专区',
+                  ),
+                ],
+              )),
           Wrap(
             children: hotGoodsWidgetList(),
           )

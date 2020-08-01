@@ -5,7 +5,7 @@ import 'dart:async';
 
 Future customRequest(pathName, {formData}) async {
   try {
-    print('开始请求。。。。$pathName');
+    print('开始请求。。。。$pathName\n 请求参数： $formData');
     Dio dio = new Dio();
     Response response;
     dio.options.contentType = Headers.formUrlEncodedContentType;

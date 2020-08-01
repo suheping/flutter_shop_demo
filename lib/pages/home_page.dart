@@ -5,7 +5,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
-// import 'package:flutter_easyrefresh/easy_refresh.dart';
+import '../routers/application.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -147,9 +147,15 @@ class SwiperDiy extends StatelessWidget {
       child: Swiper(
         itemCount: swiperDataList.length,
         itemBuilder: (context, index) {
-          return Image.network(
-            swiperDataList[index]['image'],
-            fit: BoxFit.fill,
+          return InkWell(
+            onTap: () {
+              Application.router.navigateTo(context,
+                  '/goodDetail?goodId=${swiperDataList[index]['goodsId']}');
+            },
+            child: Image.network(
+              swiperDataList[index]['image'],
+              fit: BoxFit.fill,
+            ),
           );
         },
         autoplay: true,
@@ -258,10 +264,13 @@ class Recommend extends StatelessWidget {
   }
 
   // 推荐商品
-  Widget _product(index) {
+  Widget _product(context, index) {
     return Container(
         child: InkWell(
-      onTap: () {},
+      onTap: () {
+        Application.router.navigateTo(context,
+            '/goodDetail?goodId=${this.recommendList[index]['goodsId']}');
+      },
       child: Container(
         height: ScreenUtil().setHeight(300),
         width: ScreenUtil().setWidth(250),
@@ -294,7 +303,7 @@ class Recommend extends StatelessWidget {
         itemCount: this.recommendList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return _product(index);
+          return _product(context, index);
         },
       ),
     );
@@ -327,16 +336,16 @@ class Floor extends StatelessWidget {
   }
 
   // 第一层楼
-  Widget floor1Content() {
+  Widget floor1Content(context) {
     return Container(
       child: Row(
         children: <Widget>[
-          floorContentItem(0),
+          floorContentItem(context, 0),
           Container(
             child: Column(
               children: <Widget>[
-                floorContentItem(1),
-                floorContentItem(2),
+                floorContentItem(context, 1),
+                floorContentItem(context, 2),
               ],
             ),
           )
@@ -346,20 +355,26 @@ class Floor extends StatelessWidget {
   }
 
   // 第二层楼
-  Widget floor2Content() {
+  Widget floor2Content(context) {
     return Container(
       child: Row(
-        children: <Widget>[floorContentItem(3), floorContentItem(4)],
+        children: <Widget>[
+          floorContentItem(context, 3),
+          floorContentItem(context, 4)
+        ],
       ),
     );
   }
 
   // 楼层中单个商品
-  Widget floorContentItem(int index) {
+  Widget floorContentItem(context, int index) {
     return Container(
       width: ScreenUtil().setWidth(374),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Application.router.navigateTo(
+              context, '/goodDetail?goodId=${floorInfo[index]['goodsId']}');
+        },
         child: Image.network(floorInfo[index]['image']),
       ),
     );
@@ -374,7 +389,11 @@ class Floor extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.grey[200]),
       height: ScreenUtil().setHeight(800),
       child: Column(
-        children: <Widget>[floorTitle(), floor1Content(), floor2Content()],
+        children: <Widget>[
+          floorTitle(),
+          floor1Content(context),
+          floor2Content(context)
+        ],
       ),
     );
   }
@@ -401,7 +420,10 @@ class _HotGoodsState extends State<HotGoods> {
       hotGoodsWidgetList = this.hotGoodsList.map((item) {
         // 返回每个商品widget
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            Application.router
+                .navigateTo(context, '/goodDetail?goodId=${item['goodsId']}');
+          },
           child: Container(
             width: ScreenUtil().setWidth(372),
             child: Column(

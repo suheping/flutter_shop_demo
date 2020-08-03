@@ -5,6 +5,7 @@ import 'provider/counter.dart';
 import 'provider/child_category.dart';
 import 'provider/good_detail_provider.dart';
 import 'provider/category_goods_list.dart';
+import 'provider/shop_cart_provider.dart';
 import 'package:fluro/fluro.dart';
 import 'routers/application.dart';
 import 'routers/routes.dart';
@@ -24,7 +25,10 @@ void main() {
       ),
       ChangeNotifierProvider<GoodDetailPorvider>(
         create: (_) => GoodDetailPorvider(),
-      )
+      ),
+      ChangeNotifierProvider<ShopCartProvider>(
+        create: (_) => ShopCartProvider(),
+      ),
     ],
     child: MyApp(),
   ));

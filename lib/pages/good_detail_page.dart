@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/pages/good_detail_widget/good_detail_middle_widget.dart';
 import 'package:flutter_shop/provider/good_detail_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'good_detail_widget/good_detail_bottom_bar.dart';
 import 'good_detail_widget/good_detail_top_widget.dart';
 
 class GoodDetailPage extends StatelessWidget {
@@ -25,10 +27,22 @@ class GoodDetailPage extends StatelessWidget {
         future: _getBackInfo(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Container(
-              child: Column(
-                children: <Widget>[GoodDetailTopWidge()],
-              ),
+            return Stack(
+              children: <Widget>[
+                Container(
+                  child: ListView(
+                    children: <Widget>[
+                      GoodDetailTopWidge(),
+                      GoodDetailMiddleWidget()
+                    ],
+                  ),
+                ),
+                Positioned(
+                  child: GoodDetailBottomBar(),
+                  left: 0,
+                  bottom: 0,
+                )
+              ],
             );
           } else {
             return Text('加载中');

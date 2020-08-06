@@ -5,6 +5,8 @@ import 'handler.dart';
 class Routes {
   static String root = '/';
   static String goodDetailPage = '/goodDetail';
+  static String shopCartPage = '/shopCart';
+
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
       handlerFunc: (context, parameters) {
@@ -12,5 +14,6 @@ class Routes {
       },
     );
     router.define(goodDetailPage, handler: goodDetailHandler);
+    router.define(shopCartPage, handler: shopCartHandler);
   }
 }

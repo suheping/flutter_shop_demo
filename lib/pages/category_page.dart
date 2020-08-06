@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../provider/category_goods_list.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../routers/application.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -324,9 +325,12 @@ class _CategoryGoodsWidgetState extends State<CategoryGoodsWidget> {
   }
 
   // 每个商品部件
-  Widget _goodsItemWidget(List list, int index) {
+  Widget _goodsItemWidget(List<CategoryGoodData> list, int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Application.router
+            .navigateTo(context, '/goodDetail?goodId=${list[index].goodsId}');
+      },
       child: Container(
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
@@ -350,7 +354,7 @@ class _CategoryGoodsWidgetState extends State<CategoryGoodsWidget> {
   }
 
   // 商品图片部件
-  Widget _goodsItemImageWidget(List list, int index) {
+  Widget _goodsItemImageWidget(List<CategoryGoodData> list, int index) {
     return Container(
       width: ScreenUtil().setWidth(260),
       child: Image.network(list[index].image),
@@ -358,7 +362,7 @@ class _CategoryGoodsWidgetState extends State<CategoryGoodsWidget> {
   }
 
   // 商品名称部件
-  Widget _goodsItemNameWidget(List list, int index) {
+  Widget _goodsItemNameWidget(List<CategoryGoodData> list, int index) {
     return Container(
       width: ScreenUtil().setWidth(320),
       padding: EdgeInsets.only(left: 10, bottom: 20),
@@ -372,7 +376,7 @@ class _CategoryGoodsWidgetState extends State<CategoryGoodsWidget> {
   }
 
   // 商品价格部件
-  Widget _goodsItemPriceWidget(List list, int index) {
+  Widget _goodsItemPriceWidget(List<CategoryGoodData> list, int index) {
     return Container(
       padding: EdgeInsets.only(left: 10, top: 20),
       child: Row(

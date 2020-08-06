@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/provider/good_detail_provider.dart';
+import 'package:flutter_shop/routers/application.dart';
 import '../../provider/shop_cart_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,9 @@ class GoodDetailBottomBar extends StatelessWidget {
             width: ScreenUtil().setWidth(110),
             height: ScreenUtil().setHeight(110),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Application.router.navigateTo(context, '/shopCart');
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: Colors.red,

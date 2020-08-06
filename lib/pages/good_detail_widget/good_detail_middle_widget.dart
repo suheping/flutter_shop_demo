@@ -45,6 +45,7 @@ class GoodDetailMiddleWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         context.read<GoodDetailPorvider>().setIsDesc('desc');
+        // Provider.of<GoodDetailPorvider>(context,listen: false).setIsDesc('desc');
       },
       child: Container(
         alignment: Alignment.center,
@@ -74,6 +75,8 @@ class GoodDetailMiddleWidget extends StatelessWidget {
       onTap: () {
         // 切换tab的时候，重新调了后端接口，这个bug得搞下
         context.read<GoodDetailPorvider>().setIsDesc('comments');
+        // Provider.of<GoodDetailPorvider>(context, listen: false)
+        //     .setIsDesc('comments');
       },
       child: Container(
         alignment: Alignment.center,

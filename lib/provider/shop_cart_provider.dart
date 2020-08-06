@@ -5,6 +5,9 @@ import '../model/shop_cart_goods_model.dart';
 
 class ShopCartProvider with ChangeNotifier {
   List<ShopCartGoodModel> _cartGoodsList = [];
+  double _totalPrice = 0; //商品总数量
+  int _totalCount = 0; //商品总价格
+  bool _allSelected = true; //购物车商品是否全部选中
 
   // 加入购物车
   void addToCart(
@@ -68,9 +71,20 @@ class ShopCartProvider with ChangeNotifier {
     _cartGoodsList = [];
     if (tmpString == null) {
       _cartGoodsList = [];
+      _totalCount = 0;
+      _totalPrice = 0;
     } else {
       List<Map> tmpListMap = (json.decode(tmpString) as List).cast();
+      _totalCount = 0;
+      _totalPrice = 0;
+      _allSelected = true;
       tmpListMap.forEach((item) {
+        if (item['selected']) {
+          _totalCount += item['count'];
+          _totalPrice += (item['price'] * item['count']);
+        } else {
+          _allSelected = false;
+        }
         _cartGoodsList.add(ShopCartGoodModel.fromJson(item));
       });
     }
@@ -95,5 +109,41 @@ class ShopCartProvider with ChangeNotifier {
     await getShopCartGoods();
   }
 
+  // 点击购物车某个商品的checkbox时调用
+  setSelected(ShopCartGoodModel good) async {
+    SharedPreferences sdfs = await SharedPreferences.getInstance();
+    String tmpString = sdfs.getString('cart_goods');
+    List<Map> tmpListMap = (json.decode(tmpString) as List).cast();
+    int index = 0;
+    int setIndex = 0;
+    tmpListMap.forEach((item) {
+      if (item['goodId'] == good.goodId) {
+        setIndex = index;
+      }
+      index++;
+    });
+    tmpListMap[setIndex] = good.toJson();
+    sdfs.setString('cart_goods', json.encode(tmpListMap).toString());
+    await getShopCartGoods();
+  }
+
+  // 点击购物车全选按钮时调用
+  setAllSelected(bool allSelected) async {
+    SharedPreferences sdfs = await SharedPreferences.getInstance();
+    String tmpString = sdfs.getString('cart_goods');
+    List<Map> tmpListMap = (json.decode(tmpString) as List).cast();
+    List<Map> newList = [];
+    tmpListMap.forEach((item) {
+      var newItem = item;
+      newItem['selected'] = allSelected;
+      newList.add(newItem);
+    });
+    sdfs.setString('cart_goods', json.encode(newList).toString());
+    await getShopCartGoods();
+  }
+
   List<ShopCartGoodModel> get cartGoodsList => _cartGoodsList;
+  double get totalPrice => _totalPrice;
+  int get totalCount => _totalCount;
+  bool get allSelected => _allSelected;
 }

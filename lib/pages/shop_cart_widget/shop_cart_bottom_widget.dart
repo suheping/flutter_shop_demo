@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_shop/provider/shop_cart_provider.dart';
 
 class ShopCartBottomWidget extends StatelessWidget {
+  int totalCount;
+  double totalPrice;
+  bool allSelected;
+  ShopCartBottomWidget(this.totalCount, this.totalPrice, this.allSelected);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -10,7 +16,7 @@ class ShopCartBottomWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _checkBoxWidget(),
+          _checkBoxWidget(context),
           _sumWidget(),
           _settlementButton()
         ],
@@ -19,7 +25,7 @@ class ShopCartBottomWidget extends StatelessWidget {
   }
 
   // checkbox
-  Widget _checkBoxWidget() {
+  Widget _checkBoxWidget(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5),
 
@@ -28,8 +34,10 @@ class ShopCartBottomWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Checkbox(
-            onChanged: (value) {},
-            value: true,
+            onChanged: (value) {
+              context.read<ShopCartProvider>().setAllSelected(value);
+            },
+            value: this.allSelected,
             activeColor: Colors.pink,
           ),
           Text('全选')
@@ -59,7 +67,7 @@ class ShopCartBottomWidget extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 width: ScreenUtil().setWidth(166),
                 child: Text(
-                  '￥99999.00',
+                  '￥${this.totalPrice}',
                   style: TextStyle(
                       color: Colors.pink, fontSize: ScreenUtil().setSp(24)),
                 ),
@@ -84,7 +92,7 @@ class ShopCartBottomWidget extends StatelessWidget {
         onPressed: () {},
         color: Colors.pink,
         child: Text(
-          '结算（2）',
+          '结算(${this.totalCount})',
           style:
               TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(24)),
         ),

@@ -40,7 +40,10 @@ class ShopCartItemWidget extends StatelessWidget {
       width: ScreenUtil().setWidth(80),
       alignment: Alignment.center,
       child: Checkbox(
-        onChanged: (value) {},
+        onChanged: (value) {
+          item.selected = value;
+          context.read<ShopCartProvider>().setSelected(item);
+        },
         value: item.selected,
         activeColor: Colors.pink,
       ),

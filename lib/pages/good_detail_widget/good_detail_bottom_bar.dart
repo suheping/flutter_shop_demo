@@ -4,6 +4,7 @@ import 'package:flutter_shop/provider/good_detail_provider.dart';
 import 'package:flutter_shop/routers/application.dart';
 import '../../provider/shop_cart_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_shop/provider/index_provider.dart';
 
 class GoodDetailBottomBar extends StatelessWidget {
   @override
@@ -18,7 +19,9 @@ class GoodDetailBottomBar extends StatelessWidget {
             height: ScreenUtil().setHeight(110),
             child: IconButton(
               onPressed: () {
-                Application.router.navigateTo(context, '/shopCart');
+                // Application.router.navigateTo(context, '/shopCart');
+                context.read<IndexProvider>().setCurrentIndex(2);
+                Navigator.pop(context);
               },
               icon: Icon(
                 Icons.shopping_cart,

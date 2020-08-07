@@ -142,8 +142,34 @@ class ShopCartProvider with ChangeNotifier {
     await getShopCartGoods();
   }
 
+  // 购物车单个商品数量加减
+  setItemCount(ShopCartGoodModel item, String todo) async {
+    SharedPreferences sdfs = await SharedPreferences.getInstance();
+    String tmpString = sdfs.getString('cart_goods');
+    List<Map> tmpListMap = (json.decode(tmpString) as List).cast();
+    int index = 0;
+    int setIndex = 0;
+    tmpListMap.forEach((element) {
+      if (element['goodId'] == item.goodId) {
+        setIndex = index;
+      }
+      index++;
+    });
+
+    if (todo == 'add') {
+      item.count++;
+    } else if (item.count > 1) {
+      item.count--;
+    }
+
+    tmpListMap[setIndex] = item.toJson();
+    sdfs.setString('cart_goods', json.encode(tmpListMap).toString());
+    await getShopCartGoods();
+  }
+
   List<ShopCartGoodModel> get cartGoodsList => _cartGoodsList;
-  double get totalPrice => _totalPrice;
+  double get totalPrice =>
+      double.tryParse(_totalPrice.toStringAsFixed(2)) ?? _totalPrice;
   int get totalCount => _totalCount;
   bool get allSelected => _allSelected;
 }

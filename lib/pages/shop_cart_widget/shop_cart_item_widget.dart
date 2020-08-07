@@ -23,7 +23,7 @@ class ShopCartItemWidget extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             child: Column(
-              children: <Widget>[_itemName(), ShopCartGoodCountWidget()],
+              children: <Widget>[_itemName(), ShopCartGoodCountWidget(item)],
             ),
           ),
           Column(

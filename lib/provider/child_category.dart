@@ -15,12 +15,14 @@ class ChildCategory with ChangeNotifier {
     _pageNo = 1; // 每次切换大类，默认加载第一页数据
     _categorySubId = ''; //每次切换大类，小类id置为空
     _categoryId = categoryId;
+    // 定义小类：全部
     BxMallSubDto all = BxMallSubDto();
     all.mallSubId = '';
     all.mallCategoryId = '';
     all.mallSubName = '全部';
     all.comments = 'null';
     _list = [all];
+    // 将获取到的小类添加到_list中
     _list.addAll(list);
     notifyListeners();
   }

@@ -6,6 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import '../routers/application.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_shop/provider/index_provider.dart';
+import 'package:flutter_shop/provider/child_category.dart';
+import 'package:flutter_shop/model/category_model.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -186,7 +190,16 @@ class TopNavigator extends StatelessWidget {
         children: navigatorDataList.map((item) {
           return InkWell(
             onTap: () {
-              print('点击了导航 ${item['mallCategoryName']}');
+              // print('点击了导航 ${item['mallCategoryName']}');
+              // Application.router.navigateTo(context, 'path');
+              // 修改大类
+              // print('----------------------------');
+              // print(item['bxMallSubDto']);
+              // print('----------------------------');
+
+              // context.read<ChildCategory>().setChildCategory(
+              //     item['bxMallSubDto'], item['mallCategoryId']);
+              // context.read<IndexProvider>().setCurrentIndex(1);
             },
             child: Column(
               children: <Widget>[

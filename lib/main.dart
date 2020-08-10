@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'pages/index_page.dart';
 import 'package:provider/provider.dart';
 import 'provider/counter.dart';
-import 'provider/child_category.dart';
+import 'provider/child_category_provider.dart';
 import 'provider/good_detail_provider.dart';
-import 'provider/category_goods_list.dart';
+import 'provider/category_goods_list_provider.dart';
 import 'provider/shop_cart_provider.dart';
 import 'provider/index_provider.dart';
 import 'package:fluro/fluro.dart';
@@ -15,9 +15,6 @@ void main() {
   // runApp(MyApp());
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider<Counter>(
-        create: (_) => Counter(),
-      ),
       ChangeNotifierProvider<ChildCategory>(
         create: (_) => ChildCategory(),
       ),

@@ -8,7 +8,7 @@ import 'dart:convert';
 import '../routers/application.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shop/provider/index_provider.dart';
-import 'package:flutter_shop/provider/child_category.dart';
+import 'package:flutter_shop/provider/child_category_provider.dart';
 import 'package:flutter_shop/model/category_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -171,7 +171,7 @@ class SwiperDiy extends StatelessWidget {
 
 // 头部导航
 class TopNavigator extends StatelessWidget {
-  final List navigatorDataList;
+  final List<Map> navigatorDataList;
   const TopNavigator({Key key, this.navigatorDataList}) : super(key: key);
 
   @override
@@ -190,16 +190,14 @@ class TopNavigator extends StatelessWidget {
         children: navigatorDataList.map((item) {
           return InkWell(
             onTap: () {
-              // print('点击了导航 ${item['mallCategoryName']}');
-              // Application.router.navigateTo(context, 'path');
-              // 修改大类
-              // print('----------------------------');
-              // print(item['bxMallSubDto']);
-              // print('----------------------------');
-
               // context.read<ChildCategory>().setChildCategory(
               //     item['bxMallSubDto'], item['mallCategoryId']);
               // context.read<IndexProvider>().setCurrentIndex(1);
+
+              Provider.of<ChildCategory>(context, listen: false)
+                  .setChildCategory(
+                      item['bxMallSubDto'], item['mallCategoryId']);
+              Provider.of<IndexProvider>(context).setCurrentIndex(1);
             },
             child: Column(
               children: <Widget>[

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shop/provider/child_category.dart';
+import 'package:flutter_shop/provider/child_category_provider.dart';
 import 'package:flutter_shop/service/service_methods.dart';
 import 'dart:convert';
 import '../model/category_model.dart';
 import '../model/category_goods_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../provider/category_goods_list.dart';
+import '../provider/category_goods_list_provider.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../routers/application.dart';
